@@ -7,7 +7,7 @@ public class blackboard : MonoBehaviour
 {
     public GameObject cellPrefab; // Referencia al prefab de la celda
     public Transform gridParent; // Padre de la cuadrícula en la jerarquía
-    public float spacing = 2f; // Espaciado entre celdas
+    public float spacing = 0f; // Espaciado entre celdas
 
     private int[,] matrix = new int[50, 50]; // Matriz privada de enteros de 50x50
     private GameObject[,] cells = new GameObject[50, 50]; // Matriz privada de celdas
@@ -35,9 +35,22 @@ public class blackboard : MonoBehaviour
                 RectTransform rectTransform = cell.GetComponent<RectTransform>();
                 if (rectTransform != null)
                 {
-                    rectTransform.anchoredPosition = new Vector2(x * (cellWidth + spacing), -y * (cellHeight + spacing));
+                    // Calcular la posición de la celda con el espaciado adecuado
+                    float posX = x * spacing;
+                    float posY = -y * spacing; // Nota: el signo negativo en Y es para alinear en un sistema de coordenadas de GUI
+                    rectTransform.anchoredPosition = new Vector2(posX, posY);
                 }
             }
+        }
+
+        // Ajustar el tamaño del gridParent para que se ajuste al tamaño de la cuadrícula
+        RectTransform gridRectTransform = gridParent.GetComponent<RectTransform>();
+        if (gridRectTransform != null)
+        {
+            gridRectTransform.sizeDelta = new Vector2(
+                50 * (cellWidth + spacing) - spacing,
+                50 * (cellHeight + spacing) - spacing
+            );
         }
     }
 
@@ -53,6 +66,22 @@ public class blackboard : MonoBehaviour
             cells[x, y].GetComponent<Image>().color = Color.white;
             matrix[x, y] = 0;
         }
+
+        // Mostrar el estado de la matriz en el log
+        LogMatrix();
+    }
+
+    void LogMatrix()
+    {
+        string matrixString = "";
+        for (int i = 0; i < 50; i++)
+        {
+            for (int j = 0; j < 50; j++)
+            {
+                matrixString += matrix[i, j] + " ";
+            }
+            matrixString += "\n";
+        }
+        Debug.Log(matrixString);
     }
 }
-

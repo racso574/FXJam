@@ -12,6 +12,15 @@ public class IslandManager : MonoBehaviour
     public int floorCount; // Definir el número de pisos
     int objectCount; // Definir el número de objetos, aunque no se use
     public List<GameObject> prefabsToSpawn;  // Nueva lista de prefabs
+
+        int[,] testmatrix = 
+    {
+        { 1, 1, 0, 1, 1 },
+        { 1, 6, 1, 1, 1 },
+        { 1, 1, 1, 1, 1 },
+        { 1, 5, 1, 3, 1 },
+        { 1, 1, 1, 1, 1 }
+    };
     
 
     void Start()
@@ -28,7 +37,7 @@ public class IslandManager : MonoBehaviour
 
         int[,] randomIslandMatrix = matrixGenerator.GenerateMatrix(matrixSize, floorCount, objectCount, seed);
 
-        tilemapBuilder.GenerateIsland(randomIslandMatrix);
-        prefabPlacer.GeneratePrefabPositions(randomIslandMatrix, prefabsToSpawn);
+        tilemapBuilder.GenerateIsland(testmatrix);
+        prefabPlacer.GeneratePrefabPositions(testmatrix, prefabsToSpawn);
     }
 }
