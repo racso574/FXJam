@@ -1,31 +1,43 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class Cell : MonoBehaviour
+public class Cell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler
 {
-    private Image image;
-    public bool isBlack = false;
+    private int x;
+    private int y;
+    private blackboard board;
+    private bool isLeftMouseButtonHeld = false;
+    private bool isRightMouseButtonHeld = false;
 
-    void Start()
+    public void Initialize(int x, int y, blackboard board)
     {
-        image = GetComponent<Image>();
+        this.x = x;
+        this.y = y;  // Corrección: asignar el valor correcto a y
+        this.board = board;
     }
 
-    void OnMouseOver()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (Input.GetMouseButton(0)) // Clic izquierdo
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            SetColor(true);
+            board.UpdateCell(x, y, true);
         }
-        else if (Input.GetMouseButton(1)) // Clic derecho
+        else if (eventData.button == PointerEventData.InputButton.Right)
         {
-            SetColor(false);
+            board.UpdateCell(x, y, false);
         }
     }
 
-    void SetColor(bool black)
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        isBlack = black;
-        image.color = isBlack ? Color.black : Color.white;
+        if (Input.GetMouseButton(0))
+        {
+            board.UpdateCell(x, y, true);
+        }
+        else if (Input.GetMouseButton(1))
+        {
+            board.UpdateCell(x, y, false);
+        }
     }
 }
