@@ -4,27 +4,43 @@ using UnityEngine;
 
 public class PrefabPlacer : MonoBehaviour
 {
-   public void GeneratePrefabPositions(int[,] islandMatrix, List<GameObject> prefabsToSpawn)
-{
-    for (int y = 0; y < islandMatrix.GetLength(0); y++)
+    public Transform parentObject; // Referencia al objeto padre
+
+    public void GeneratePrefabPositions(int[,] islandMatrix, List<GameObject> prefabsToSpawn)
     {
-        for (int x = 0; x < islandMatrix.GetLength(1); x++)
+        ClearPreviousPrefabs();
+
+        for (int y = 0; y < islandMatrix.GetLength(0); y++)
         {
-            int value = islandMatrix[y, x];
-            // Solo coloca prefabs si el valor es mayor o igual a 2
-            if (value >= 2)
+            for (int x = 0; x < islandMatrix.GetLength(1); x++)
             {
-                int prefabIndex = value - 2;
-                if (prefabIndex < prefabsToSpawn.Count)
+                int value = islandMatrix[y, x];
+                // Solo coloca prefabs si el valor es mayor o igual a 2
+                if (value >= 2)
                 {
-                    Vector3 position = new Vector3(x - islandMatrix.GetLength(1) / 2, (islandMatrix.GetLength(0) - 1 - y) - islandMatrix.GetLength(0) / 2, 0);
-                    Instantiate(prefabsToSpawn[prefabIndex], position, Quaternion.identity);
+                    int prefabIndex = value - 2;
+                    if (prefabIndex < prefabsToSpawn.Count)
+                    {
+                        Vector3 position = new Vector3(x - islandMatrix.GetLength(1) / 2, (islandMatrix.GetLength(0) - 1 - y) - islandMatrix.GetLength(0) / 2, 0);
+                        GameObject prefab = Instantiate(prefabsToSpawn[prefabIndex], position, Quaternion.identity, parentObject);
+                    }
                 }
             }
         }
     }
+
+    private void ClearPreviousPrefabs()
+    {
+#if UNITY_EDITOR
+        foreach (Transform child in parentObject)
+        {
+            DestroyImmediate(child.gameObject);
+        }
+#else
+        foreach (Transform child in parentObject)
+        {
+            Destroy(child.gameObject);
+        }
+#endif
+    }
 }
-
-}
-
-

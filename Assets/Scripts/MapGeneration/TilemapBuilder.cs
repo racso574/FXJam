@@ -66,22 +66,22 @@ public class TilemapBuilder : MonoBehaviour
         // Esquinas internas
         if (up && left && !upLeft) // Esquina interna superior izquierda
         {
-            rotationAngle = 90;
+            rotationAngle = 180;
             return landTileInnerCorner;
         }
         else if (up && right && !upRight) // Esquina interna superior derecha
         {
-            rotationAngle = 0;
+            rotationAngle = -90;
             return landTileInnerCorner;
         }
         else if (down && left && !downLeft) // Esquina interna inferior izquierda
         {
-            rotationAngle = 180;
+            rotationAngle = 90;
             return landTileInnerCorner;
         }
         else if (down && right && !downRight) // Esquina interna inferior derecha
         {
-            rotationAngle = -90;
+            rotationAngle = 0;
             return landTileInnerCorner;
         }
         // Bordes
@@ -97,33 +97,33 @@ public class TilemapBuilder : MonoBehaviour
         }
         else if (up && !down && left && right) // Borde inferior
         {
-            rotationAngle = 180;
+            rotationAngle = 0;
             return landTileBorder;
         }
         else if (!up && down && left && right) // Borde superior
         {
-            rotationAngle = 0;
+            rotationAngle = 180;
             return landTileBorder;
         }
         // Esquinas externas
         else if (!up && down && !left && right) // Esquina externa superior izquierda
         {
-            rotationAngle = 90;
+            rotationAngle = 180;
             return landTileCorner;
         }
         else if (!up && down && left && !right) // Esquina externa superior derecha
         {
-            rotationAngle = 0;
+            rotationAngle = -90;
             return landTileCorner;
         }
         else if (up && !down && !left && right) // Esquina externa inferior izquierda
         {
-            rotationAngle = 180;
+            rotationAngle = 90;
             return landTileCorner;
         }
         else if (up && !down && left && !right) // Esquina externa inferior derecha
         {
-            rotationAngle = -90;
+            rotationAngle = 0;
             return landTileCorner;
         }
         else
