@@ -20,6 +20,9 @@ public class IslandManager : MonoBehaviour
         { 1, 1, 1, 1, 1 },
         { 1, 5, 1, 3, 1 },
         { 1, 1, 1, 3, 1 },
+        { 1, 1, 1, 3, 1 },
+        { 1, 1, 1, 3, 1 },
+        { 1, 6, 1, 3, 1 },
         { 1, 1, 1, 1, 1 }
     };
     
@@ -35,10 +38,9 @@ public class IslandManager : MonoBehaviour
         //{
             seed = Random.Range(int.MinValue, int.MaxValue);
         //}
-
         int[,] randomIslandMatrix = matrixGenerator.GenerateMatrix(matrixSize, floorCount, objectCount, seed);
 
-        tilemapBuilder.GenerateIsland(testmatrix);
-        prefabPlacer.GeneratePrefabPositions(testmatrix, prefabsToSpawn);
+        tilemapBuilder.GenerateIsland(randomIslandMatrix);
+        prefabPlacer.GeneratePrefabPositions(randomIslandMatrix, prefabsToSpawn);
     }
 }
