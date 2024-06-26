@@ -2,15 +2,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using UnityEngine.Events;
 
 public class IslandUiController : MonoBehaviour
 {
     public GameObject panel; // Referencia directa al GameObject del panel
     public TextMeshProUGUI textMeshPro;
     public float fadeOutDuration = 2f;
+    public float fadeInDuration = 2f;
     public float textDisplaySpeed = 0.05f;
     public float textFadeOutDelay = 2f;
     public string message;
+    public UnityEvent onStartFadeIn; // Evento Unity que será llamado al comenzar el fade in
+    public UnityEvent onEndFadeIn; // Evento Unity que será llamado al finalizar el fade in
 
     private Image panelImage;
     private Color panelColor;
@@ -24,32 +28,54 @@ public class IslandUiController : MonoBehaviour
 
         // Activar el panel y hacer visibles el panel y el texto
         panelImage.color = new Color(panelColor.r, panelColor.g, panelColor.b, 1); // Asegúrate de que el panel esté completamente visible
-        textMeshPro.color = new Color(textColor.r, textColor.g, textColor.b, 1); // Asegúrate de que el texto esté completamente visible
+        textMeshPro.color = new Color(textColor.r, textColor.g, textColor.b, 0); // Asegúrate de que el texto esté completamente invisible
         panel.SetActive(true);
     }
 
     private void Start()
     {
-        StartCoroutine(FadeOutPanelAndText());
+        // Hacer fade out al inicio
+        StartCoroutine(FadeOutPanel());
     }
 
-    private IEnumerator FadeOutPanelAndText()
+    public IEnumerator FadeInPanel()
     {
         float elapsedTime = 0f;
 
-        // Fade out del panel y texto al mismo tiempo
+        // Llamar al evento onStartFadeIn al comenzar el fade in
+        onStartFadeIn.Invoke();
+
+        // Fade in del panel
+        while (elapsedTime < fadeInDuration)
+        {
+            float alpha = Mathf.Lerp(0, 1, elapsedTime / fadeInDuration);
+            panelImage.color = new Color(panelColor.r, panelColor.g, panelColor.b, alpha);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        panelImage.color = new Color(panelColor.r, panelColor.g, panelColor.b, 1);
+
+        // Llamar al evento onEndFadeIn al finalizar el fade in
+        onEndFadeIn.Invoke();
+    }
+
+    private IEnumerator FadeOutPanel()
+    {
+        float elapsedTime = 0f;
+
+        // Fade out del panel
         while (elapsedTime < fadeOutDuration)
         {
             float alpha = Mathf.Lerp(1, 0, elapsedTime / fadeOutDuration);
             panelImage.color = new Color(panelColor.r, panelColor.g, panelColor.b, alpha);
-            textMeshPro.color = new Color(textColor.r, textColor.g, textColor.b, alpha);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         panelImage.color = new Color(panelColor.r, panelColor.g, panelColor.b, 0);
-        textMeshPro.color = new Color(textColor.r, textColor.g, textColor.b, 0);
 
+        // Mostrar el texto después del fade out del panel
         StartCoroutine(DisplayText());
     }
 
@@ -64,7 +90,7 @@ public class IslandUiController : MonoBehaviour
             yield return new WaitForSeconds(textDisplaySpeed);
         }
 
-        yield return new WaitForSeconds(textFadeOutDelay); // Tiempo de espera antes de iniciar el segundo fade out
+        yield return new WaitForSeconds(textFadeOutDelay); // Tiempo de espera antes de iniciar el fade out del texto
         StartCoroutine(FadeOutText());
     }
 
@@ -72,7 +98,7 @@ public class IslandUiController : MonoBehaviour
     {
         float elapsedTime = 0f;
 
-        // Segundo fade out del texto
+        // Fade out del texto
         while (elapsedTime < fadeOutDuration)
         {
             float alpha = Mathf.Lerp(1, 0, elapsedTime / fadeOutDuration);
