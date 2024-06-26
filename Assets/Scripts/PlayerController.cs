@@ -37,6 +37,28 @@ public class PlayerController : MonoBehaviour
         movementInput.x = Input.GetAxisRaw("Horizontal");
         movementInput.y = Input.GetAxisRaw("Vertical");
         movementInput.Normalize();
+
+        // Voltear el sprite según la dirección de movimiento
+        if (movementInput.x < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (movementInput.x > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+
+        // Rotar ligeramente el sprite mientras se mueve
+        if (movementInput != Vector2.zero)
+        {
+            float tiltAngle = Mathf.Sin(Time.time * 10) * -2f;
+            transform.rotation = Quaternion.Euler(0, 0, tiltAngle);
+        }
+        else
+        {
+            // Resetear la rotación cuando está quieto
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 
     private void FixedUpdate()
@@ -46,4 +68,3 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.SmoothDamp(rb.velocity, targetVelocity, ref movementVelocity, accelerationTime);
     }
 }
-
