@@ -4,7 +4,7 @@ public class ImageToMatrix : MonoBehaviour
 {
     public Texture2D inputImage;
 
-    void Start()
+    public void ConvertImage()
     {
         if (inputImage.width != 50 || inputImage.height != 50)
         {

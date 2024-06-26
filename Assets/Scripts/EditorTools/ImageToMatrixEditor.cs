@@ -11,7 +11,7 @@ public class ImageToMatrixEditor : Editor
         ImageToMatrix imageToMatrix = (ImageToMatrix)target;
         if (GUILayout.Button("Convert Image to Matrix"))
         {
-            imageToMatrix.ConvertAndLogImageToMatrix();
+            imageToMatrix.ConvertImage();
         }
     }
 }
