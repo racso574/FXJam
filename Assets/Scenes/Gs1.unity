@@ -451,11 +451,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   landTilemap: {fileID: 533842523}
   waterTilemap: {fileID: 62275331}
-  landTile: {fileID: 11400000, guid: b3b1868cb8b311c4d8d0fee2a4257d15, type: 2}
+  landTiles:
+  - {fileID: 11400000, guid: d8d6e28f4b5365648bacdb9fedf5f16b, type: 2}
+  - {fileID: 11400000, guid: edd6634f3a8d8634482dbdf319d0bdcb, type: 2}
+  - {fileID: 11400000, guid: edd6634f3a8d8634482dbdf319d0bdcb, type: 2}
+  - {fileID: 11400000, guid: b3b1868cb8b311c4d8d0fee2a4257d15, type: 2}
+  - {fileID: 11400000, guid: b3b1868cb8b311c4d8d0fee2a4257d15, type: 2}
+  - {fileID: 11400000, guid: b3b1868cb8b311c4d8d0fee2a4257d15, type: 2}
+  - {fileID: 11400000, guid: b3b1868cb8b311c4d8d0fee2a4257d15, type: 2}
+  waterTiles:
+  - {fileID: 11400000, guid: f94e00aa3dbcd684fb900cdc34cf93cd, type: 2}
+  - {fileID: 11400000, guid: 37c54589639d31446aa7c10d607e3691, type: 2}
   landTileBorder: {fileID: 11400000, guid: ac4e42336dc93ea40b73a3d99ad65287, type: 2}
   landTileCorner: {fileID: 11400000, guid: 9cb0c9cf6c537e049940db175c6dfb9e, type: 2}
   landTileInnerCorner: {fileID: 11400000, guid: 2463b1e63d8b11f47b427c46cc55abdb, type: 2}
-  waterTile: {fileID: 11400000, guid: 37c54589639d31446aa7c10d607e3691, type: 2}
 --- !u!114 &174819043
 MonoBehaviour:
   m_ObjectHideFlags: 0

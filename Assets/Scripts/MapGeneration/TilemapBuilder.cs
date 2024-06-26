@@ -7,41 +7,43 @@ public class TilemapBuilder : MonoBehaviour
 {
     public Tilemap landTilemap;
     public Tilemap waterTilemap;
-    public Tile landTile;
+
+    public List<Tile> landTiles;
+    public List<Tile> waterTiles;
+
     public Tile landTileBorder;
     public Tile landTileCorner;
     public Tile landTileInnerCorner;
-    public Tile waterTile;
 
     public void GenerateIsland(int[,] matrix)
-{
-    ClearTilemaps();
-
-    int matrixWidth = matrix.GetLength(1);
-    int matrixHeight = matrix.GetLength(0);
-
-    int offsetX = -matrixWidth / 2;
-    int offsetY = -matrixHeight / 2;
-
-    for (int y = 0; y < matrixHeight; y++)
     {
-        for (int x = 0; x < matrixWidth; x++)
-        {
-            Vector3Int tilePosition = new Vector3Int(x + offsetX, (matrixHeight - 1 - y) + offsetY, 0);
+        ClearTilemaps();
 
-            if (matrix[y, x] != 0) // Cualquier número positivo es tierra
+        int matrixWidth = matrix.GetLength(1);
+        int matrixHeight = matrix.GetLength(0);
+
+        int offsetX = -matrixWidth / 2;
+        int offsetY = -matrixHeight / 2;
+
+        for (int y = 0; y < matrixHeight; y++)
+        {
+            for (int x = 0; x < matrixWidth; x++)
             {
-                TileBase tileToPlace = GetTileForPosition(matrix, x, y, out float rotationAngle);
-                SetTileWithRotation(landTilemap, tilePosition, tileToPlace, rotationAngle);
-            }
-            else
-            {
-                waterTilemap.SetTile(tilePosition, waterTile);
+                Vector3Int tilePosition = new Vector3Int(x + offsetX, (matrixHeight - 1 - y) + offsetY, 0);
+
+                if (matrix[y, x] != 0) // Cualquier número positivo es tierra
+                {
+                    TileBase tileToPlace = GetTileForPosition(matrix, x, y, out float rotationAngle);
+                    SetTileWithRotation(landTilemap, tilePosition, tileToPlace, rotationAngle);
+                }
+                else
+                {
+                    TileBase waterTileToPlace = waterTiles[Random.Range(0, waterTiles.Count)];
+                    waterTilemap.SetTile(tilePosition, waterTileToPlace);
+                }
             }
         }
     }
-}
-
 
     private void ClearTilemaps()
     {
@@ -128,7 +130,7 @@ public class TilemapBuilder : MonoBehaviour
         }
         else
         {
-            return landTile;
+            return landTiles[Random.Range(0, landTiles.Count)];
         }
     }
 
