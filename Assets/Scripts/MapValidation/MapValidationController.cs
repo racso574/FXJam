@@ -13,6 +13,9 @@ public class MapValidationController : MonoBehaviour
     // Referencia al script MatrixComparator
     private MatrixComparator matrixComparator;
 
+    // Referencia al script PuntuationUi
+    public PuntuationUi puntuacionUi;
+
     void Start()
     {
         // Obtener la referencia al MatrixVoidGenerator
@@ -34,6 +37,9 @@ public class MapValidationController : MonoBehaviour
 
         // Calcular la puntuación de similitud
         float similarityScore = matrixComparator.CompareMatrices(positions, randomIslandMatrix);
+
+        // Pasar la puntuación de similitud a PuntuationUi
+        puntuacionUi.ActualizarPuntuacion(Mathf.RoundToInt(similarityScore));
 
         // Ahora puedes usar similarityScore como necesites
         Debug.Log("Similarity Score: " + similarityScore);
