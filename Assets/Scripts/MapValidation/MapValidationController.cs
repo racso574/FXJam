@@ -10,6 +10,6 @@ public class MapValidationController : MonoBehaviour
     // Esta función será llamada para iniciar la validación
     public void StartValidation()
     {
-        int[] positions = addObjectPosition.SetObjectPositionInArray();
+        int[,] positions = addObjectPosition.SetObjectPositionInArray();
     }
 }
