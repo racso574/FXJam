@@ -24,7 +24,7 @@ public class ImageToMatrix : MonoBehaviour
         {
             for (int x = 0; x < 50; x++)
             {
-                Color pixelColor = image.GetPixel(x, y);
+                Color pixelColor = image.GetPixel(x, 49 - y); // Ajuste de la coordenada Y
                 if (pixelColor == Color.white)
                 {
                     matrix[y, x] = 1;

@@ -471,9 +471,7 @@ MonoBehaviour:
   tilemapBuilder: {fileID: 174819042}
   prefabPlacer: {fileID: 174819044}
   matrixGenerator: {fileID: 174819045}
-  seed: -564905900
-  matrixSize: 50
-  floorCount: 500
+  seed: 1
   prefabsToSpawn:
   - {fileID: 3412299497072180959, guid: 85396087046630e4d89314ed146cd70a, type: 3}
   - {fileID: 8272248969717278040, guid: 508326d964d3bf94d96c0cb8e20806c6, type: 3}
