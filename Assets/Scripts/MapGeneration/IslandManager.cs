@@ -4,12 +4,28 @@ using UnityEngine;
 
 public class IslandManager : MonoBehaviour
 {
+    public static IslandManager Instance { get; private set; }
     public TilemapBuilder tilemapBuilder;
     public PrefabPlacer prefabPlacer;
     public MatrixGenerator matrixGenerator;
     public int seed;  // Variable pública para la semilla
     public List<GameObject> prefabsToSpawn;  // Nueva lista de prefabs
     
+    private int[,] randomIslandMatrix;
+
+    void Awake()
+    {
+        // Implementar el patrón Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -18,9 +34,13 @@ public class IslandManager : MonoBehaviour
 
     public void GenerateRandomIsland()
     {
-        int[,] randomIslandMatrix = matrixGenerator.GenerateMatrix(seed);
-
+        randomIslandMatrix = matrixGenerator.GenerateMatrix(seed);
         tilemapBuilder.GenerateIsland(randomIslandMatrix);
         prefabPlacer.GeneratePrefabPositions(randomIslandMatrix, prefabsToSpawn);
+    }
+
+    public int[,] GetRandomIslandMatrix()
+    {
+        return randomIslandMatrix;
     }
 }
