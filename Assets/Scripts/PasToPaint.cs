@@ -14,7 +14,7 @@ public class PasToPaint : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene("Gs2");
+            SceneManager.LoadScene(2);
         }
     }
 }
