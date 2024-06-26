@@ -168,10 +168,10 @@ TextureImporter:
       name: objectsprites_2
       rect:
         serializedVersion: 2
-        x: 65
-        y: 33
-        width: 14
-        height: 14
+        x: 100
+        y: 108
+        width: 27
+        height: 34
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -189,10 +189,10 @@ TextureImporter:
       name: objectsprites_3
       rect:
         serializedVersion: 2
-        x: 97
-        y: 33
-        width: 14
-        height: 14
+        x: 115
+        y: 80
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -257,7 +257,7 @@ TextureImporter:
         width: 26
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -287,6 +287,8 @@ TextureImporter:
       objectsprites_4: -1304496921
       objectsprites_5: -1667781805
       objectsprites_6: 630197879
+      objectsprites_7: 456442631
+      objectsprites_8: 124944487
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
