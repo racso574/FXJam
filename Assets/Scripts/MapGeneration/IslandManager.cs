@@ -37,6 +37,24 @@ public class IslandManager : MonoBehaviour
         randomIslandMatrix = matrixGenerator.GenerateMatrix(seed);
         tilemapBuilder.GenerateIsland(randomIslandMatrix);
         prefabPlacer.GeneratePrefabPositions(randomIslandMatrix, prefabsToSpawn);
+        SaveMatrixToPlayerPrefs(randomIslandMatrix, "RandomIslandMatrix");
+    }
+
+    private void SaveMatrixToPlayerPrefs(int[,] matrix, string key)
+    {
+        int rows = matrix.GetLength(0);
+        int cols = matrix.GetLength(1);
+        string matrixString = rows + "," + cols + ";";
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                matrixString += matrix[i, j].ToString() + ",";
+            }
+        }
+        PlayerPrefs.SetString(key, matrixString.TrimEnd(','));
+        PlayerPrefs.Save();
     }
 
     public int[,] GetRandomIslandMatrix()

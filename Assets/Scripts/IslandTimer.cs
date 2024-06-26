@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Events;
 
 public class IslandTimer : MonoBehaviour
 {
@@ -10,11 +11,12 @@ public class IslandTimer : MonoBehaviour
     public TextMeshProUGUI textMeshPro;  // TextMeshPro UI
     public Button button;                // Botón de UI
     public float waitTime = 10.0f;       // Tiempo de espera configurable
+    public UnityEvent onCanvasVisible;   // Evento de Unity
 
     private float timer = 0.0f;
     private bool fadeInStarted = false;
 
-    // Awake is called when the script instance is being loaded
+    // Awake is called when el script instance is being loaded
     void Awake()
     {
         // Desactiva los componentes
@@ -62,6 +64,7 @@ public class IslandTimer : MonoBehaviour
         }
 
         SetUIVisibility(1.0f); // Asegúrate de que la UI esté completamente visible al final
+        onCanvasVisible?.Invoke(); // Invoca el evento cuando el canvas sea visible
     }
 
     void SetUIVisibility(float alpha)

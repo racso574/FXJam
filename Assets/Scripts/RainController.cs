@@ -51,7 +51,7 @@ public class RainController : MonoBehaviour
             if (rainParticles != null)
             {
                 var main = rainParticles.main;
-                main.simulationSpeed = 3.1f;
+                main.simulationSpeed = 3.4f;
 
                 var emission = rainParticles.emission;
                 emission.rateOverTime = 200.0f;
