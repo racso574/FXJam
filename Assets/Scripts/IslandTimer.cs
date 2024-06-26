@@ -9,7 +9,8 @@ public class IslandTimer : MonoBehaviour
 {
     public GameObject panel;             // Panel de UI
     public TextMeshProUGUI textMeshPro;  // TextMeshPro UI
-    public Button button;                // Botón de UI
+    public Button button;
+    public Button button2;  // Botón de UI
     public float waitTime = 10.0f;       // Tiempo de espera configurable
     public UnityEvent onCanvasVisible;   // Evento de Unity
 
@@ -23,6 +24,7 @@ public class IslandTimer : MonoBehaviour
         panel.SetActive(false);
         textMeshPro.gameObject.SetActive(false);
         button.gameObject.SetActive(false);
+        button2.gameObject.SetActive(false);    
     }
 
     // Start is called before the first frame update
@@ -44,6 +46,7 @@ public class IslandTimer : MonoBehaviour
             panel.SetActive(true);
             textMeshPro.gameObject.SetActive(true);
             button.gameObject.SetActive(true);
+            button2.gameObject.SetActive(true);
 
             StartCoroutine(FadeInUI());
             fadeInStarted = true;
@@ -92,5 +95,13 @@ public class IslandTimer : MonoBehaviour
         }
 
         buttonCanvasGroup.alpha = alpha;
+
+        CanvasGroup buttonCanvasGroup2 = button2.GetComponent<CanvasGroup>();
+        if (buttonCanvasGroup == null)
+        {
+            buttonCanvasGroup2 = button2.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        buttonCanvasGroup2.alpha = alpha;
     }
 }
