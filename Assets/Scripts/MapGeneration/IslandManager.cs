@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class IslandManager : MonoBehaviour
 {
-    public static IslandManager Instance { get; private set; }
-    public TilemapBuilder tilemapBuilder;
+       public TilemapBuilder tilemapBuilder;
     public PrefabPlacer prefabPlacer;
     public MatrixGenerator matrixGenerator;
     public int seed;  // Variable pública para la semilla
@@ -13,19 +12,7 @@ public class IslandManager : MonoBehaviour
     
     private int[,] randomIslandMatrix;
 
-    void Awake()
-    {
-        // Implementar el patrón Singleton
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+
 
     void Start()
     {
@@ -57,8 +44,4 @@ public class IslandManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public int[,] GetRandomIslandMatrix()
-    {
-        return randomIslandMatrix;
-    }
-}
+  }
