@@ -8,7 +8,7 @@ public class PrefabPlacer : MonoBehaviour
 
     public void GeneratePrefabPositions(int[,] islandMatrix, List<GameObject> prefabsToSpawn)
     {
-        ClearPreviousPrefabs();
+        
 
         for (int y = 0; y < islandMatrix.GetLength(0); y++)
         {
@@ -29,18 +29,5 @@ public class PrefabPlacer : MonoBehaviour
         }
     }
 
-    private void ClearPreviousPrefabs()
-    {
-#if UNITY_EDITOR
-        foreach (Transform child in parentObject)
-        {
-            DestroyImmediate(child.gameObject);
-        }
-#else
-        foreach (Transform child in parentObject)
-        {
-            Destroy(child.gameObject);
-        }
-#endif
-    }
+    
 }

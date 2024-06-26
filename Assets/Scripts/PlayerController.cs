@@ -13,6 +13,22 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        GameObject targetObject = GameObject.Find("Objeto1(Clone)");
+        if (targetObject != null)
+        {
+            // Obtener la posición del objeto encontrado
+            Vector3 targetPosition = targetObject.transform.position;
+
+            // Ajustar la posición Y con un desplazamiento de +2
+            targetPosition.y += 1;
+
+            // Teletransportar el jugador a la nueva posición
+            transform.position = targetPosition;
+        }
+        else
+        {
+            Debug.LogError("Objeto1(Clone) no encontrado en la escena.");
+        }
     }
 
     private void Update()
