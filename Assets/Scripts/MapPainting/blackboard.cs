@@ -17,46 +17,44 @@ public class blackboard : MonoBehaviour
         InitializeGrid();
     }
 
- void InitializeGrid()
-{
-    RectTransform cellRect = cellPrefab.GetComponent<RectTransform>();
-    float cellWidth = cellRect.rect.width;
-    float cellHeight = cellRect.rect.height;
-
-    // Iterar sobre columnas primero
-    for (int x = 0; x < 50; x++)
+    void InitializeGrid()
     {
-        // Iterar sobre filas después
-        for (int y = 0; y < 50; y++)
-        {
-            GameObject cell = Instantiate(cellPrefab, gridParent);
-            cell.GetComponent<Cell>().Initialize(y, x, this);
-            cells[y, x] = cell;
+        RectTransform cellRect = cellPrefab.GetComponent<RectTransform>();
+        float cellWidth = cellRect.rect.width;
+        float cellHeight = cellRect.rect.height;
 
-            // Calcular la posición de cada celda
-            RectTransform rectTransform = cell.GetComponent<RectTransform>();
-            if (rectTransform != null)
+        // Iterar sobre columnas primero
+        for (int x = 0; x < 50; x++)
+        {
+            // Iterar sobre filas después
+            for (int y = 0; y < 50; y++)
             {
-                // Calcular la posición de la celda con el espaciado adecuado
-                float posX = x * spacing;
-                float posY = -y * spacing; // Nota: el signo negativo en Y es para alinear en un sistema de coordenadas de GUI
-                rectTransform.anchoredPosition = new Vector2(posX, posY);
+                GameObject cell = Instantiate(cellPrefab, gridParent);
+                cell.GetComponent<Cell>().Initialize(y, x, this);
+                cells[y, x] = cell;
+
+                // Calcular la posición de cada celda
+                RectTransform rectTransform = cell.GetComponent<RectTransform>();
+                if (rectTransform != null)
+                {
+                    // Calcular la posición de la celda con el espaciado adecuado
+                    float posX = x * spacing;
+                    float posY = -y * spacing; // Nota: el signo negativo en Y es para alinear en un sistema de coordenadas de GUI
+                    rectTransform.anchoredPosition = new Vector2(posX, posY);
+                }
             }
         }
+
+        // Ajustar el tamaño del gridParent para que se ajuste al tamaño de la cuadrícula
+        RectTransform gridRectTransform = gridParent.GetComponent<RectTransform>();
+        if (gridRectTransform != null)
+        {
+            gridRectTransform.sizeDelta = new Vector2(
+                50 * (cellWidth + spacing) - spacing,
+                50 * (cellHeight + spacing) - spacing
+            );
+        }
     }
-
-    // Ajustar el tamaño del gridParent para que se ajuste al tamaño de la cuadrícula
-    RectTransform gridRectTransform = gridParent.GetComponent<RectTransform>();
-    if (gridRectTransform != null)
-    {
-        gridRectTransform.sizeDelta = new Vector2(
-            50 * (cellWidth + spacing) - spacing,
-            50 * (cellHeight + spacing) - spacing
-        );
-    }
-}
-
-
 
     public void UpdateCell(int x, int y, bool isLeftClick)
     {
@@ -73,6 +71,25 @@ public class blackboard : MonoBehaviour
 
         // Mostrar el estado de la matriz en el log
         LogMatrix();
+    }
+
+    public void SetMatrix(int[,] newMatrix)
+    {
+        for (int i = 0; i < newMatrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < newMatrix.GetLength(1); j++)
+            {
+                if (newMatrix[i, j] == 1)
+                {
+                    // Solo actualizar si la celda no está pintada de negro (prevalece lo pintado con ratón)
+                    if (cells[i, j].GetComponent<Image>().color != Color.black)
+                    {
+                        cells[i, j].GetComponent<Image>().color = Color.red;
+                        matrix[i, j] = 1;
+                    }
+                }
+            }
+        }
     }
 
     void LogMatrix()

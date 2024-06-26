@@ -1896,6 +1896,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addObjectPosition: {fileID: 1360048838}
   puntuacionUi: {fileID: 1360048842}
+  blackboard: {fileID: 1012478462}
 --- !u!114 &1360048840
 MonoBehaviour:
   m_ObjectHideFlags: 0

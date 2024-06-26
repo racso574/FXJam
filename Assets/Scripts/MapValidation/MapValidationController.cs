@@ -16,6 +16,9 @@ public class MapValidationController : MonoBehaviour
     // Referencia al script PuntuationUi
     public PuntuationUi puntuacionUi;
 
+    // Referencia al script blackboard
+    private blackboard blackboard;
+
     void Start()
     {
         // Obtener la referencia al MatrixVoidGenerator
@@ -23,6 +26,21 @@ public class MapValidationController : MonoBehaviour
 
         // Obtener la referencia al MatrixComparator
         matrixComparator = GetComponent<MatrixComparator>();
+
+        // Obtener la referencia al blackboard desde el GameObject BlackBoard
+        GameObject blackboardObject = GameObject.Find("BlackBoard");
+        if (blackboardObject != null)
+        {
+            blackboard = blackboardObject.GetComponent<blackboard>();
+            if (blackboard == null)
+            {
+                Debug.LogError("No blackboard component found on BlackBoard GameObject.");
+            }
+        }
+        else
+        {
+            Debug.LogError("No GameObject named BlackBoard found in the scene.");
+        }
     }
 
     // Esta función será llamada para iniciar la validación
@@ -46,10 +64,20 @@ public class MapValidationController : MonoBehaviour
         float similarityScore = matrixComparator.CompareMatrices(randomIslandMatrix, positions);
 
         // Pasar la puntuación de similitud a PuntuationUi
-        puntuacionUi.ActualizarPuntuacion(similarityScore);
+        //puntuacionUi.ActualizarPuntuacion(similarityScore);
 
         // Ahora puedes usar similarityScore como necesites
         Debug.Log("Similarity Score: " + similarityScore);
+
+        // Llamar a SetMatrix en el script blackboard y pasarle randomIslandMatrix
+        if (blackboard != null)
+        {
+            blackboard.SetMatrix(randomIslandMatrix);
+        }
+        else
+        {
+            Debug.LogError("Blackboard reference is null. Cannot call SetMatrix.");
+        }
     }
 
     private int[,] LoadMatrixFromPlayerPrefs(string key)
