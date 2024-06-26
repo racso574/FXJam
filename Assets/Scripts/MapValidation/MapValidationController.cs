@@ -36,10 +36,10 @@ public class MapValidationController : MonoBehaviour
         randomIslandMatrix = matrixVoidGenerator.ProcessMatrix(randomIslandMatrix);
 
         // Calcular la puntuación de similitud
-        float similarityScore = matrixComparator.CompareMatrices(positions, randomIslandMatrix);
+        float similarityScore = matrixComparator.CompareMatrices(randomIslandMatrix,positions);
 
         // Pasar la puntuación de similitud a PuntuationUi
-        puntuacionUi.ActualizarPuntuacion(Mathf.RoundToInt(similarityScore));
+        puntuacionUi.ActualizarPuntuacion(similarityScore);
 
         // Ahora puedes usar similarityScore como necesites
         Debug.Log("Similarity Score: " + similarityScore);

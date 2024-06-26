@@ -25,7 +25,7 @@ public class PuntuationUi : MonoBehaviour
     }
 
     // Función para actualizar la puntuación y activar el panel
-    public void ActualizarPuntuacion(int puntuacion)
+    public void ActualizarPuntuacion(float puntuacion)
     {
         // Activar el panel
         panel.SetActive(true);

@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MatrixComparator : MonoBehaviour
 {
+    private const int RANGE = 5;
+    private const int MAX_POINTS_1 = 5;
+    private const int MAX_POINTS_2_TO_6 = 12;
+
     // Esta función compara dos matrices y devuelve el porcentaje de similitud basado en las reglas descritas
     public float CompareMatrices(int[,] array1, int[,] array2)
     {
@@ -12,38 +16,26 @@ public class MatrixComparator : MonoBehaviour
         int totalPoints = 0;
         int maxPossiblePoints = 0;
 
+        bool[,] matchedPositions = new bool[rows, cols];
+
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < cols; j++)
             {
                 int value1 = array1[i, j];
-                if (value1 == 0) continue; // Los ceros no cuentan para la precisión
+                if (value1 == 0) continue;
 
                 int value2 = array2[i, j];
+                maxPossiblePoints += GetMaxPoints(value1);
 
-                if (value1 == 1)
+                if (value1 == value2 && !matchedPositions[i, j])
                 {
-                    maxPossiblePoints += 5;
-                    if (value1 == value2)
-                    {
-                        totalPoints += 5;
-                    }
-                    else
-                    {
-                        totalPoints += FindNearbyMatch(array2, i, j, value1, 5, 5);
-                    }
+                    totalPoints += GetMaxPoints(value1);
+                    matchedPositions[i, j] = true;
                 }
-                else if (value1 >= 2 && value1 <= 6)
+                else
                 {
-                    maxPossiblePoints += 12;
-                    if (value1 == value2)
-                    {
-                        totalPoints += 12;
-                    }
-                    else
-                    {
-                        totalPoints += FindNearbyMatch(array2, i, j, value1, 6, 12);
-                    }
+                    totalPoints += FindNearbyMatch(array2, i, j, value1, matchedPositions);
                 }
             }
         }
@@ -51,29 +43,57 @@ public class MatrixComparator : MonoBehaviour
         return maxPossiblePoints > 0 ? (float)totalPoints / maxPossiblePoints * 100f : 0f;
     }
 
-    // Esta función busca un valor específico en una matriz dentro de un rango dado y devuelve puntos basado en la proximidad
-    private int FindNearbyMatch(int[,] array, int row, int col, int targetValue, int range, int maxPoints)
+    private int GetMaxPoints(int value)
+    {
+        if (value == 1)
+        {
+            return MAX_POINTS_1;
+        }
+        else if (value >= 2 && value <= 6)
+        {
+            return MAX_POINTS_2_TO_6;
+        }
+        return 0;
+    }
+
+    private int FindNearbyMatch(int[,] array, int row, int col, int targetValue, bool[,] matchedPositions)
     {
         int rows = array.GetLength(0);
         int cols = array.GetLength(1);
 
-        for (int r = 1; r <= range; r++)
-        {
-            int points = maxPoints - r + 1;
-            for (int i = -r; i <= r; i++)
-            {
-                for (int j = -r; j <= r; j++)
-                {
-                    int newRow = row + i;
-                    int newCol = col + j;
+        Queue<(int, int, int)> queue = new Queue<(int, int, int)>();
+        queue.Enqueue((row, col, 0));
 
-                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && array[newRow, newCol] == targetValue)
+        while (queue.Count > 0)
+        {
+            var (currentRow, currentCol, distance) = queue.Dequeue();
+
+            if (distance > RANGE) break;
+
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    int newRow = currentRow + i;
+                    int newCol = currentCol + j;
+
+                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols &&
+                        !matchedPositions[newRow, newCol] && array[newRow, newCol] == targetValue)
                     {
+                        matchedPositions[newRow, newCol] = true;
+                        int points = Mathf.Max(GetMaxPoints(targetValue) - distance, 1);
                         return points;
+                    }
+
+                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols &&
+                        !matchedPositions[newRow, newCol])
+                    {
+                        queue.Enqueue((newRow, newCol, distance + 1));
                     }
                 }
             }
         }
-        return 0; // No se encontró coincidencia en el rango dado
+
+        return 0;
     }
 }
