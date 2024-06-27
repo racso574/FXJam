@@ -12,6 +12,8 @@ public class blackboard : MonoBehaviour
     public int[,] matrix = new int[50, 50]; // Matriz privada de enteros de 50x50
     private GameObject[,] cells = new GameObject[50, 50]; // Matriz privada de celdas
 
+    public float cellsPerSecond = 10f; // Número de celdas a dibujar por segundo
+
     void Start()
     {
         InitializeGrid();
@@ -75,20 +77,45 @@ public class blackboard : MonoBehaviour
 
     public void SetMatrix(int[,] newMatrix)
     {
+        // Recolectar todas las posiciones de 1 en la nueva matriz
+        List<Vector2Int> positions = new List<Vector2Int>();
         for (int i = 0; i < newMatrix.GetLength(0); i++)
         {
             for (int j = 0; j < newMatrix.GetLength(1); j++)
             {
                 if (newMatrix[i, j] == 1)
                 {
-                    // Solo actualizar si la celda no está pintada de negro (prevalece lo pintado con ratón)
-                    if (cells[i, j].GetComponent<Image>().color != Color.black)
-                    {
-                        cells[i, j].GetComponent<Image>().color = Color.red;
-                        matrix[i, j] = 1;
-                    }
+                    positions.Add(new Vector2Int(i, j));
                 }
             }
+        }
+
+        // Iniciar la corrutina para pintar las celdas
+        StartCoroutine(DrawCells(positions));
+    }
+
+    private IEnumerator DrawCells(List<Vector2Int> positions)
+    {
+        float delay = 1f / cellsPerSecond;
+
+        foreach (var pos in positions)
+        {
+            int i = pos.x;
+            int j = pos.y;
+
+            // Cambiar a verde si la celda está pintada de negro y no se va a pintar de rojo
+            if (cells[i, j].GetComponent<Image>().color == Color.black)
+            {
+                cells[i, j].GetComponent<Image>().color = Color.green;
+            }
+            // Pintar de rojo si la celda no está pintada de negro
+            else if (cells[i, j].GetComponent<Image>().color != Color.black)
+            {
+                cells[i, j].GetComponent<Image>().color = Color.red;
+                matrix[i, j] = 1;
+            }
+
+            yield return new WaitForSeconds(delay);
         }
     }
 

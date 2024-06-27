@@ -1314,6 +1314,7 @@ MonoBehaviour:
   cellPrefab: {fileID: 5288233359735326134, guid: 85f304e744b28ef4abd4feae2fa07fc0, type: 3}
   gridParent: {fileID: 801548294}
   spacing: 11.6
+  cellsPerSecond: 20
 --- !u!1 &1046318403
 GameObject:
   m_ObjectHideFlags: 0
@@ -1896,7 +1897,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addObjectPosition: {fileID: 1360048838}
   puntuacionUi: {fileID: 1360048842}
-  blackboard: {fileID: 1012478462}
 --- !u!114 &1360048840
 MonoBehaviour:
   m_ObjectHideFlags: 0
