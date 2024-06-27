@@ -81,6 +81,10 @@ public class IslandUiController : MonoBehaviour
 
     private IEnumerator DisplayText()
     {
+        // Asegúrate de que el TextMeshProUGUI tenga su tamaño ajustado adecuadamente y overflow configurado
+        textMeshPro.enableWordWrapping = true;
+        textMeshPro.overflowMode = TMPro.TextOverflowModes.Overflow;
+
         textMeshPro.text = "";
         textMeshPro.color = new Color(textColor.r, textColor.g, textColor.b, 1); // Vuelve a hacer visible el texto
 
@@ -93,6 +97,7 @@ public class IslandUiController : MonoBehaviour
         yield return new WaitForSeconds(textFadeOutDelay); // Tiempo de espera antes de iniciar el fade out del texto
         StartCoroutine(FadeOutText());
     }
+
 
     private IEnumerator FadeOutText()
     {

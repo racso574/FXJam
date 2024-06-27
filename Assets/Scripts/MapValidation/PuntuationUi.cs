@@ -29,10 +29,10 @@ public class PuntuationUi : MonoBehaviour
     // Función para actualizar la puntuación y activar el panel
     public void ActualizarPuntuacion(float puntuacion, int objectscore)
     {
-        // Activar el panel
-        panel.SetActive(true);
-
         puntuacionText.text = $"{puntuacion:F1}% Accuracy on Silhouette";
         puntuacionText2.text = $"{objectscore}/3 Objects Correctly Placed";
+        panel.SetActive(true);
+
+        
     }
 }

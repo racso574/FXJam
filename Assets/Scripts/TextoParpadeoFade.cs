@@ -5,6 +5,7 @@ using TMPro;
 public class TextoParpadeoFade : MonoBehaviour
 {
     public TextMeshProUGUI texto; // Asigna el TextMeshPro en el inspector
+    public GameObject panel; // Asigna el Panel en el inspector
     public float duracionParpadeo = 0.5f; // Duración de un parpadeo (en segundos)
     public int numeroDeParpadeos = 5; // Número de veces que parpadeará
 
@@ -14,6 +15,12 @@ public class TextoParpadeoFade : MonoBehaviour
         {
             texto = GetComponent<TextMeshProUGUI>();
         }
+
+        if (panel != null)
+        {
+            panel.SetActive(true); // Activar el Panel
+        }
+
         StartCoroutine(Parpadeo());
     }
 
@@ -30,8 +37,15 @@ public class TextoParpadeoFade : MonoBehaviour
             yield return new WaitForSeconds(duracionParpadeo);
         }
 
-        // La última vez se queda transparente y se desactiva
+        // La última vez se queda transparente
         texto.alpha = 0f;
+
+        // Desactivar tanto el Panel como el Texto
+        if (panel != null)
+        {
+            panel.SetActive(false);
+        }
+
         gameObject.SetActive(false);
     }
 }
