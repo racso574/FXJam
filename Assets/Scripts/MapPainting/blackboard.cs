@@ -14,9 +14,13 @@ public class blackboard : MonoBehaviour
 
     public float cellsPerSecond = 10f; // Número de celdas a dibujar por segundo
 
+    Color lightGray = new Color32(214, 214, 214, 255);
+
+
     void Start()
     {
         InitializeGrid();
+        
     }
 
     void InitializeGrid()
@@ -60,6 +64,7 @@ public class blackboard : MonoBehaviour
 
     public void UpdateCell(int x, int y, bool isLeftClick)
     {
+        
         if (isLeftClick)
         {
             cells[x, y].GetComponent<Image>().color = Color.black;
@@ -67,7 +72,7 @@ public class blackboard : MonoBehaviour
         }
         else
         {
-            cells[x, y].GetComponent<Image>().color = Color.white;
+            cells[x, y].GetComponent<Image>().color = lightGray;
             matrix[x, y] = 0;
         }
 
@@ -75,7 +80,7 @@ public class blackboard : MonoBehaviour
         LogMatrix();
     }
 
-    public void SetMatrix(int[,] newMatrix)
+    public Coroutine SetMatrix(int[,] newMatrix)
     {
         // Recolectar todas las posiciones de 1 en la nueva matriz
         List<Vector2Int> positions = new List<Vector2Int>();
@@ -90,9 +95,10 @@ public class blackboard : MonoBehaviour
             }
         }
 
-        // Iniciar la corrutina para pintar las celdas
-        StartCoroutine(DrawCells(positions));
+        // Iniciar la corrutina para pintar las celdas y retornarla
+        return StartCoroutine(DrawCells(positions));
     }
+
 
     private IEnumerator DrawCells(List<Vector2Int> positions)
     {

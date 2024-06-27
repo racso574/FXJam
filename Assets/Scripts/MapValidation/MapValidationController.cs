@@ -64,20 +64,31 @@ public class MapValidationController : MonoBehaviour
         float similarityScore = matrixComparator.CompareMatrices(randomIslandMatrix, positions);
 
         // Pasar la puntuación de similitud a PuntuationUi
-        //puntuacionUi.ActualizarPuntuacion(similarityScore);
-
-        // Ahora puedes usar similarityScore como necesites
         Debug.Log("Similarity Score: " + similarityScore);
 
         // Llamar a SetMatrix en el script blackboard y pasarle randomIslandMatrix
         if (blackboard != null)
         {
-            blackboard.SetMatrix(randomIslandMatrix);
+            Coroutine drawCellsCoroutine = blackboard.SetMatrix(randomIslandMatrix);
+            // Iniciar la coroutine para esperar a que DrawCells termine y luego esperar 5 segundos antes de actualizar la puntuación
+            StartCoroutine(UpdateScoreAfterDelay(similarityScore, drawCellsCoroutine));
         }
         else
         {
             Debug.LogError("Blackboard reference is null. Cannot call SetMatrix.");
         }
+    }
+
+    private IEnumerator UpdateScoreAfterDelay(float similarityScore, Coroutine drawCellsCoroutine)
+    {
+        // Esperar a que la corrutina DrawCells termine
+        yield return drawCellsCoroutine;
+
+        // Esperar 5 segundos
+        yield return new WaitForSeconds(3f);
+
+        // Actualizar la puntuación
+        puntuacionUi.ActualizarPuntuacion(similarityScore);
     }
 
     private int[,] LoadMatrixFromPlayerPrefs(string key)
