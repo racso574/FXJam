@@ -4,96 +4,100 @@ using UnityEngine;
 
 public class MatrixComparator : MonoBehaviour
 {
-    private const int RANGE = 5;
-    private const int MAX_POINTS_1 = 5;
-    private const int MAX_POINTS_2_TO_6 = 12;
-
-    // Esta función compara dos matrices y devuelve el porcentaje de similitud basado en las reglas descritas
     public float CompareMatrices(int[,] array1, int[,] array2)
     {
         int rows = array1.GetLength(0);
         int cols = array1.GetLength(1);
-        int totalPoints = 0;
-        int maxPossiblePoints = 0;
 
-        bool[,] matchedPositions = new bool[rows, cols];
+        if (rows != array2.GetLength(0) || cols != array2.GetLength(1))
+        {
+            Debug.LogError("Matrices must have the same dimensions.");
+            return 0f;
+        }
+
+        int totalOnes1 = 0;
+        int matchedOnes = 0;
+        int totalOnes2 = 0;
+
+        // Matriz para marcar las casillas de array2 que ya han sido consideradas
+        bool[,] checkedArray2 = new bool[rows, cols];
 
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < cols; j++)
             {
-                int value1 = array1[i, j];
-                if (value1 == 0) continue;
-
-                int value2 = array2[i, j];
-                maxPossiblePoints += GetMaxPoints(value1);
-
-                if (value1 == value2 && !matchedPositions[i, j])
+                if (array1[i, j] == 1)
                 {
-                    totalPoints += GetMaxPoints(value1);
-                    matchedPositions[i, j] = true;
+                    totalOnes1++;
+                    if (IsPixelMatch(array1, array2, i, j, checkedArray2))
+                    {
+                        matchedOnes++;
+                    }
                 }
-                else
+                if (array2[i, j] == 1)
                 {
-                    totalPoints += FindNearbyMatch(array2, i, j, value1, matchedPositions);
+                    totalOnes2++;
                 }
             }
         }
 
-        return maxPossiblePoints > 0 ? (float)totalPoints / maxPossiblePoints * 100f : 0f;
+        if (totalOnes1 == 0) return 0f; // Evitar división por cero
+
+        // Calcular el porcentaje de similitud
+        float similarity = (float)matchedOnes / totalOnes1 * 100f;
+
+        // Calcular la penalización por los 1s extra en array2
+        int extraOnes = totalOnes2 - totalOnes1;
+        if (extraOnes > 0)
+        {
+            float extraPenalty = (float)extraOnes / totalOnes1 * 100f;
+            float finalPercentage = similarity - extraPenalty;
+            return finalPercentage < 0 ? 0 : finalPercentage;
+        }
+
+        return similarity;
     }
 
-    private int GetMaxPoints(int value)
+    private bool IsPixelMatch(int[,] array1, int[,] array2, int x, int y, bool[,] checkedArray2)
     {
-        if (value == 1)
+        if (array2[x, y] == 1)
         {
-            return MAX_POINTS_1;
+            checkedArray2[x, y] = true;
+            return true;
         }
-        else if (value >= 2 && value <= 6)
-        {
-            return MAX_POINTS_2_TO_6;
-        }
-        return 0;
+
+        bool up = x > 0 && array1[x - 1, y] == 1;
+        bool down = x < array1.GetLength(0) - 1 && array1[x + 1, y] == 1;
+        bool left = y > 0 && array1[x, y - 1] == 1;
+        bool right = y < array1.GetLength(1) - 1 && array1[x, y + 1] == 1;
+
+        int searchRadius = 4;
+
+        if (!up && SearchInRadius(array2, x, y, -1, 0, searchRadius, checkedArray2)) return true;
+        if (!down && SearchInRadius(array2, x, y, 1, 0, searchRadius, checkedArray2)) return true;
+        if (!left && SearchInRadius(array2, x, y, 0, -1, searchRadius, checkedArray2)) return true;
+        if (!right && SearchInRadius(array2, x, y, 0, 1, searchRadius, checkedArray2)) return true;
+
+        return false;
     }
 
-    private int FindNearbyMatch(int[,] array, int row, int col, int targetValue, bool[,] matchedPositions)
+    private bool SearchInRadius(int[,] array, int x, int y, int dx, int dy, int radius, bool[,] checkedArray2)
     {
-        int rows = array.GetLength(0);
-        int cols = array.GetLength(1);
-
-        Queue<(int, int, int)> queue = new Queue<(int, int, int)>();
-        queue.Enqueue((row, col, 0));
-
-        while (queue.Count > 0)
+        for (int i = 1; i <= radius; i++)
         {
-            var (currentRow, currentCol, distance) = queue.Dequeue();
+            int newX = x + dx * i;
+            int newY = y + dy * i;
 
-            if (distance > RANGE) break;
-
-            for (int i = -1; i <= 1; i++)
+            if (newX >= 0 && newX < array.GetLength(0) && newY >= 0 && newY < array.GetLength(1))
             {
-                for (int j = -1; j <= 1; j++)
+                if (array[newX, newY] == 1)
                 {
-                    int newRow = currentRow + i;
-                    int newCol = currentCol + j;
-
-                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols &&
-                        !matchedPositions[newRow, newCol] && array[newRow, newCol] == targetValue)
-                    {
-                        matchedPositions[newRow, newCol] = true;
-                        int points = Mathf.Max(GetMaxPoints(targetValue) - distance, 1);
-                        return points;
-                    }
-
-                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols &&
-                        !matchedPositions[newRow, newCol])
-                    {
-                        queue.Enqueue((newRow, newCol, distance + 1));
-                    }
+                    checkedArray2[newX, newY] = true;
+                    return true;
                 }
             }
         }
 
-        return 0;
+        return false;
     }
 }
