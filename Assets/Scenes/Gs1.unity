@@ -1011,7 +1011,7 @@ MonoBehaviour:
   fadeOutDuration: 2
   fadeInDuration: 0.3
   textDisplaySpeed: 0.05
-  textFadeOutDelay: 0.4
+  textFadeOutDelay: 0.7
   message: 'explore the island and memorize it, return to the ship before the storm
     starts. '
   onStartFadeIn:
