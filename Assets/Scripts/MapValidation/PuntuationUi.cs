@@ -11,6 +11,8 @@ public class PuntuationUi : MonoBehaviour
     // Referencia al componente TextMeshPro
     [SerializeField] private TextMeshProUGUI puntuacionText;
 
+    [SerializeField] private TextMeshProUGUI puntuacionText2;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,12 +27,12 @@ public class PuntuationUi : MonoBehaviour
     }
 
     // Función para actualizar la puntuación y activar el panel
-    public void ActualizarPuntuacion(float puntuacion)
+    public void ActualizarPuntuacion(float puntuacion, int objectscore)
     {
         // Activar el panel
         panel.SetActive(true);
-        
-        // Actualizar el texto del TextMeshPro con la nueva puntuación
-        puntuacionText.text = puntuacion.ToString();
+
+        puntuacionText.text = $"{puntuacion}% Accuracy on Silhouette";
+        puntuacionText2.text = $"{objectscore}/3 Objects Correctly Placed";
     }
 }

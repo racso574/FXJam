@@ -13,6 +13,8 @@ public class MapValidationController : MonoBehaviour
     // Referencia al script MatrixComparator
     private MatrixComparator matrixComparator;
 
+    private ObjectsComparator objectsComparator;
+
     // Referencia al script PuntuationUi
     public PuntuationUi puntuacionUi;
 
@@ -26,6 +28,7 @@ public class MapValidationController : MonoBehaviour
 
         // Obtener la referencia al MatrixComparator
         matrixComparator = GetComponent<MatrixComparator>();
+        objectsComparator = GetComponent<ObjectsComparator>();
 
         // Obtener la referencia al blackboard desde el GameObject BlackBoard
         GameObject blackboardObject = GameObject.Find("BlackBoard");
@@ -61,6 +64,7 @@ public class MapValidationController : MonoBehaviour
         randomIslandMatrix = matrixVoidGenerator.ProcessMatrix(randomIslandMatrix);
 
         // Calcular la puntuación de similitud
+        int objectscore = objectsComparator.CompareMatricesObjects(randomIslandMatrix, positions);
         float similarityScore = matrixComparator.CompareMatrices(randomIslandMatrix, positions);
 
         // Pasar la puntuación de similitud a PuntuationUi
@@ -71,7 +75,7 @@ public class MapValidationController : MonoBehaviour
         {
             Coroutine drawCellsCoroutine = blackboard.SetMatrix(randomIslandMatrix);
             // Iniciar la coroutine para esperar a que DrawCells termine y luego esperar 5 segundos antes de actualizar la puntuación
-            StartCoroutine(UpdateScoreAfterDelay(similarityScore, drawCellsCoroutine));
+            StartCoroutine(UpdateScoreAfterDelay(similarityScore,objectscore, drawCellsCoroutine));
         }
         else
         {
@@ -79,7 +83,7 @@ public class MapValidationController : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateScoreAfterDelay(float similarityScore, Coroutine drawCellsCoroutine)
+    private IEnumerator UpdateScoreAfterDelay(float similarityScore,int objectscore, Coroutine drawCellsCoroutine)
     {
         // Esperar a que la corrutina DrawCells termine
         yield return drawCellsCoroutine;
@@ -88,7 +92,7 @@ public class MapValidationController : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         // Actualizar la puntuación
-        puntuacionUi.ActualizarPuntuacion(similarityScore);
+        puntuacionUi.ActualizarPuntuacion(similarityScore, objectscore);
     }
 
     private int[,] LoadMatrixFromPlayerPrefs(string key)
