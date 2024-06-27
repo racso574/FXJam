@@ -32,7 +32,7 @@ public class PuntuationUi : MonoBehaviour
         // Activar el panel
         panel.SetActive(true);
 
-        puntuacionText.text = $"{puntuacion}% Accuracy on Silhouette";
+        puntuacionText.text = $"{puntuacion:F1}% Accuracy on Silhouette";
         puntuacionText2.text = $"{objectscore}/3 Objects Correctly Placed";
     }
 }

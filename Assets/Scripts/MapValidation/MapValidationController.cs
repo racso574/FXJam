@@ -89,7 +89,7 @@ public class MapValidationController : MonoBehaviour
         yield return drawCellsCoroutine;
 
         // Esperar 5 segundos
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
 
         // Actualizar la puntuación
         puntuacionUi.ActualizarPuntuacion(similarityScore, objectscore);
